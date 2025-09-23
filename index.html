@@ -21,7 +21,6 @@
     .hidden { display: none !important; }
     .badge { background: #ff3b30; color: white; padding: 5px 10px; border-radius: 20px; font-size: 14px; position: absolute; top: -10px; right: -10px; }
     .countdown { background: #333; padding: 10px; border-radius: 8px; margin: 15px 0; font-weight: bold; color: #ffcc00; }
-    .free-tag { background: #00c853; padding: 5px 10px; border-radius: 4px; font-size: 12px; margin-left: 10px; }
   </style>
 </head>
 <body>
@@ -45,7 +44,7 @@
     <div id="step1">
       <input type="file" id="upload" accept="audio/*" />
       <p>OU</p>
-      <button id="recordBtn">🎙️ Gravar Minha Voz (5s)</button>
+      <button id="recordBtn">🎙️ Gravar Minha Voz</button>
       <button id="nextBtn" disabled>➡️ Processar com IA</button>
     </div>
 
@@ -58,10 +57,7 @@
     <div id="result" class="hidden">
       <p>✅ Produção finalizada em alta qualidade!</p>
       <audio id="player" controls></audio>
-      <div id="payOrFree">
-        <button id="payBtn">💰 Pagar R$11,00 e Baixar</button>
-        <span class="free-tag" id="freeTag">Ilimitado para assinantes</span>
-      </div>
+      <button id="payBtn">💰 Pagar R$11,00 e Baixar</button>
     </div>
 
     <!-- ETAPA 4: PAGAMENTO -->
@@ -102,14 +98,11 @@
     const premiumBtn = document.getElementById('premiumBtn');
     const countdownEl = document.getElementById('countdown');
     const endDateEl = document.getElementById('endDate');
-    const freeTag = document.getElementById('freeTag');
-    const payOrFree = document.getElementById('payOrFree');
 
     let audioBlob = null;
 
-    // CONFIGURA DATA DE EXPIRAÇÃO DA OFERTA (7 dias a partir de hoje)
-    const offerEndDate = new Date();
-    offerEndDate.setDate(offerEndDate.getDate() + 7);
+    // CONFIGURA DATA DE EXPIRAÇÃO DA OFERTA (ATÉ CARNAVAL 2026 — 15/02/2026)
+    const offerEndDate = new Date('2026-02-15T23:59:59');
     endDateEl.innerText = offerEndDate.toLocaleDateString('pt-BR');
 
     // VERIFICA SE USUÁRIO JÁ É ASSINANTE
@@ -118,30 +111,18 @@
       if (premiumData) {
         const { expiry } = JSON.parse(premiumData);
         if (new Date() < new Date(expiry)) {
-          return true; // assinatura ativa
+          return true;
         } else {
-          localStorage.removeItem('um2_premium'); // expirou
+          localStorage.removeItem('um2_premium');
         }
       }
       return false;
-    }
-
-    // ATUALIZA INTERFACE SE FOR ASSINANTE
-    function updateUIForPremium() {
-      if (checkPremium()) {
-        payBtn.classList.add('hidden');
-        freeTag.classList.remove('hidden');
-      } else {
-        payBtn.classList.remove('hidden');
-        freeTag.classList.add('hidden');
-      }
     }
 
     // ASSINAR PLANO PREMIUM
     premiumBtn.addEventListener('click', () => {
       alert("💎 Você está assinando o plano ILIMITADO por R$49!\n\nNa versão real, isso abriria o PIX para 21977290154 com txid de assinatura.");
 
-      // SIMULA PAGAMENTO E ATIVA ASSINATURA POR 30 DIAS
       const expiryDate = new Date();
       expiryDate.setDate(expiryDate.getDate() + 30);
 
@@ -151,8 +132,6 @@
       }));
 
       alert("✅ Assinatura ativada! Você pode baixar quantas músicas quiser pelos próximos 30 dias.");
-
-      updateUIForPremium();
     });
 
     // HABILITAR PRÓXIMO PASSO APÓS UPLOAD OU GRAVAÇÃO
@@ -160,75 +139,170 @@
       if (upload.files.length > 0) nextBtn.disabled = false;
     });
 
-    // GRAVAÇÃO DE VOZ
+    // GRAVAÇÃO DE VOZ REAL — COM LIMITE POR PLANO
     recordBtn.addEventListener('click', async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         const mediaRecorder = new MediaRecorder(stream);
         const chunks = [];
+        const isPremium = checkPremium();
+        const maxDuration = isPremium ? 420000 : 234000; // 7min ou 3m54s
+        let startTime = Date.now();
+        let timerInterval;
+
+        let timerDisplay = document.createElement('div');
+        timerDisplay.id = 'timer';
+        timerDisplay.style.margin = '10px 0';
+        timerDisplay.style.fontSize = '16px';
+        timerDisplay.style.color = '#ffcc00';
+        document.getElementById('step1').appendChild(timerDisplay);
 
         mediaRecorder.ondataavailable = e => chunks.push(e.data);
         mediaRecorder.onstop = () => {
+          clearInterval(timerInterval);
           audioBlob = new Blob(chunks, { type: 'audio/wav' });
           nextBtn.disabled = false;
-          alert("✅ Gravação concluída (5s)");
+          stream.getTracks().forEach(track => track.stop());
+          if (timerDisplay) timerDisplay.remove();
+          alert(`✅ Gravação concluída! (${isPremium ? '7min' : '3min54s'} máximo)`);
         };
 
         mediaRecorder.start();
-        setTimeout(() => {
-          mediaRecorder.stop();
-          stream.getTracks().forEach(track => track.stop());
-        }, 5000);
+
+        timerInterval = setInterval(() => {
+          let elapsed = Date.now() - startTime;
+          let remaining = Math.max(0, Math.floor((maxDuration - elapsed) / 1000));
+          if (timerDisplay) {
+            timerDisplay.innerText = `⏳ Tempo restante: ${Math.floor(remaining / 60)}:${String(remaining % 60).padStart(2, '0')}`;
+          }
+          if (elapsed >= maxDuration) {
+            mediaRecorder.stop();
+          }
+        }, 1000);
+
       } catch (err) {
         alert("Erro ao acessar microfone: " + err.message);
       }
     });
 
-    // PROCESSAR COM IA (SIMULADO)
+    // ✅ PROCESSAR COM IA REAL (CHAMANDO BACKEND)
     nextBtn.addEventListener('click', () => {
       step1.classList.add('hidden');
       processing.classList.remove('hidden');
 
-      setTimeout(() => {
+      const formData = new FormData();
+      formData.append('audio', audioBlob, 'voice.wav');
+      formData.append('isPremium', checkPremium() ? '1' : '0');
+
+      fetch('https://um2-backend.vercel.app/process', {
+        method: 'POST',
+        body: formData
+      })
+      .then(r => r.json())
+      .then(data => {
         processing.classList.add('hidden');
         result.classList.remove('hidden');
-
-        const fakeAudioUrl = "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav";
-        player.src = fakeAudioUrl;
+        player.src = data.url;
         player.style.display = "block";
-
-        updateUIForPremium(); // Atualiza botões após gerar música
-      }, 3000);
+        localStorage.setItem('um2_job_id', data.jobId);
+      })
+      .catch(err => {
+        alert("Erro ao processar com IA: " + err.message);
+        processing.classList.add('hidden');
+        step1.classList.remove('hidden');
+      });
     });
 
-    // IR PARA PAGAMENTO (SÓ SE NÃO FOR ASSINANTE)
+    // ✅ IR PARA PAGAMENTO (GERA COBRANÇA REAL)
     payBtn.addEventListener('click', () => {
-      if (checkPremium()) {
-        liberateDownload();
+      const jobId = localStorage.getItem('um2_job_id');
+      if (!jobId) {
+        alert("Erro: nenhum job ativo");
         return;
       }
+
       result.classList.add('hidden');
-      payment.classList.remove('hidden');
+      processing.classList.remove('hidden');
+
+      fetch('https://um2-backend.vercel.app/create-pix', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jobId, plan: 'single' })
+      })
+      .then(r => r.json())
+      .then(data => {
+        processing.classList.add('hidden');
+        payment.classList.remove('hidden');
+        
+        document.getElementById('pixInfo').innerHTML = `Valor: R$${data.amount}<br>Descrição: ${data.description}`;
+        document.getElementById('qrcode').innerHTML = `<img src="${data.qrCode}" alt="QR Code PIX" style="width:200px;height:200px;">`;
+        
+        localStorage.setItem('um2_txid', data.txid);
+      })
+      .catch(err => {
+        alert("Erro ao gerar cobrança: " + err.message);
+        processing.classList.add('hidden');
+        result.classList.remove('hidden');
+      });
     });
 
-    // CONFIRMAR PAGAMENTO (SIMULA WEBHOOK)
+    // ✅ CONFIRMAR PAGAMENTO (VERIFICA SE FOI PAGO VIA BACKEND)
     confirmPay.addEventListener('click', () => {
+      const jobId = localStorage.getItem('um2_job_id');
+      if (!jobId) {
+        alert("Erro: nenhum job ativo");
+        return;
+      }
+
       payment.classList.add('hidden');
-      liberateDownload();
-      localStorage.setItem('um2_paid_single', Date.now()); // marca pagamento único
+      processing.classList.remove('hidden');
+
+      const checkPayment = () => {
+        fetch(`https://um2-backend.vercel.app/check-payment/${jobId}`)
+        .then(r => r.json())
+        .then(data => {
+          if (data.paid) {
+            processing.classList.add('hidden');
+            download.classList.remove('hidden');
+            localStorage.setItem('um2_paid_single', Date.now());
+          } else {
+            setTimeout(checkPayment, 3000); // Verifica a cada 3s
+          }
+        })
+        .catch(err => {
+          alert("Erro ao verificar pagamento: " + err.message);
+          processing.classList.add('hidden');
+          payment.classList.remove('hidden');
+        });
+      };
+
+      checkPayment();
     });
 
-    // LIBERA DOWNLOAD (PARA ASSINANTE OU PAGAMENTO ÚNICO)
-    function liberateDownload() {
-      download.classList.remove('hidden');
-    }
-
-    // DOWNLOADS
+    // DOWNLOADS (SÓ SE PAGO OU ASSINANTE)
     downloadWav.addEventListener('click', () => {
+      const isPremium = checkPremium();
+      const hasPaid = localStorage.getItem('um2_paid_single');
+
+      if (!isPremium && !hasPaid) {
+        alert("⚠️ Pague R$11 ou assine o plano ilimitado para baixar.");
+        payment.classList.remove('hidden');
+        return;
+      }
+
       downloadFile("producao_um2.wav", "audio/wav");
     });
 
     downloadMp3.addEventListener('click', () => {
+      const isPremium = checkPremium();
+      const hasPaid = localStorage.getItem('um2_paid_single');
+
+      if (!isPremium && !hasPaid) {
+        alert("⚠️ Pague R$11 ou assine o plano ilimitado para baixar.");
+        payment.classList.remove('hidden');
+        return;
+      }
+
       downloadFile("producao_um2.mp3", "audio/mpeg");
     });
 
@@ -245,14 +319,10 @@
 
     // AO CARREGAR, VERIFICA ASSINATURA
     window.addEventListener('load', () => {
-      updateUIForPremium();
+      const hasPaid = localStorage.getItem('um2_paid_single');
+      const isPremium = checkPremium();
 
-      // SE JÁ PAGOU UMA MÚSICA ANTES, LIBERA DOWNLOAD DIRETO
-      if (localStorage.getItem('um2_paid_single') && !checkPremium()) {
-        step1.classList.add('hidden');
-        processing.classList.add('hidden');
-        result.classList.add('hidden');
-        payment.classList.add('hidden');
+      if ((hasPaid || isPremium) && player.src) {
         download.classList.remove('hidden');
       }
     });
