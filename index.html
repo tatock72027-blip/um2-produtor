@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>UM2 PRODUTOR — IA STUDIO</title>
+  <title>UM2 PRODUTOR — IA + PIX + PLANO ILIMITADO</title>
   <style>
     :root {
       --primary: #ff2d55;
@@ -13,8 +13,6 @@
       --card: #1a1a2e;
       --text: #ffffff;
       --accent: #ffcc00;
-      --back-btn: #555;
-      --back-btn-hover: #777;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
@@ -22,10 +20,10 @@
       background: var(--bg); 
       color: var(--text); 
       padding: 20px; 
-      position: relative; 
+      position: relative;
       overflow-x: hidden;
     }
-    
+
     /* 🌌 FUNDO 3D SISTEMA SOLAR */
     #solarSystem {
       position: fixed;
@@ -71,192 +69,47 @@
       margin: 0 auto; 
       background: var(--card); 
       padding: 30px; 
-      border-radius: 20px; 
+      border-radius: 16px; 
       position: relative;
       z-index: 10;
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.1);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
-    
-    h1 { 
-      font-size: 32px; 
-      margin: 20px 0; 
-      text-align: center; 
-      text-shadow: 0 0 10px var(--accent);
-    }
-    h2 { 
-      font-size: 22px; 
-      margin: 25px 0 15px; 
-      text-align: left; 
-      color: var(--accent);
     }
     
     button { 
       background: var(--primary); 
       color: white; 
       border: none; 
-      padding: 16px 32px; 
-      margin: 12px 0; 
-      border-radius: 12px; 
+      padding: 14px 28px; 
+      margin: 10px 0; 
+      border-radius: 8px; 
       font-size: 18px; 
       cursor: pointer; 
       width: 100%;
-      font-weight: bold;
-      transition: all 0.3s;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     }
-    button:hover { 
-      transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(255,45,85,0.4);
-    }
-    button:disabled { 
-      background: #555; 
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-    .secondary { background: var(--secondary); box-shadow: 0 5px 15px rgba(74,158,255,0.3); }
-    .secondary:hover { box-shadow: 0 8px 25px rgba(74,158,255,0.4); }
-    .premium { 
-      background: var(--premium); 
-      color: #000; 
-      box-shadow: 0 5px 15px rgba(255,204,0,0.3);
-    }
-    .premium:hover { 
-      box-shadow: 0 8px 25px rgba(255,204,0,0.4);
-      transform: translateY(-3px);
-    }
-    .back-btn {
-      background: var(--back-btn);
-      color: white;
-      width: 50px;
-      padding: 10px;
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      z-index: 20;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.3);
-    }
-    .back-btn:hover {
-      background: var(--back-btn-hover);
-      transform: translateY(-2px);
-    }
-    
-    #player { 
-      width: 100%; 
-      margin: 20px 0; 
-      background: rgba(255,255,255,0.1);
-      border-radius: 12px;
-      padding: 10px;
-    }
-    .hidden { display: none !important; }
-    
-    .section { 
-      background: rgba(255,255,255,0.05); 
-      padding: 20px; 
-      border-radius: 16px; 
-      margin: 20px 0;
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-    
-    select, input { 
-      padding: 16px; 
-      margin: 12px 0; 
-      border-radius: 12px; 
-      width: 100%; 
-      background: rgba(255,255,255,0.1); 
-      color: white; 
-      border: 1px solid rgba(255,255,255,0.2); 
-      font-size: 16px;
-      backdrop-filter: blur(5px);
-    }
-    
-    .status { 
-      padding: 15px; 
-      background: rgba(255,204,0,0.2); 
-      border-radius: 12px; 
-      margin: 20px 0; 
-      font-weight: bold; 
-      color: var(--accent);
-      text-align: center;
-      border: 1px solid rgba(255,204,0,0.3);
-    }
-    
-    #timer { 
-      padding: 15px; 
-      background: rgba(255,204,0,0.1); 
-      border-radius: 12px; 
-      margin: 20px 0; 
-      font-weight: bold; 
-      color: var(--accent);
-      text-align: center;
-      font-size: 18px;
-      border: 1px solid rgba(255,204,0,0.2);
-    }
+    button:disabled { background: #555; cursor: not-allowed; }
+    #upload, #recordBtn { background: var(--secondary); }
+    #premiumBtn { background: var(--premium); color: #000; font-weight: bold; }
+    #player { margin: 20px auto; width: 90%; display: none; }
+    #payment, #download { display: none; }
     
     /* 🖼️ QR CODE AJUSTADO */
     #qrcode { 
-      width: 240px; 
-      height: 240px; 
-      margin: 30px auto 20px; 
+      width: 220px; 
+      height: 220px; 
+      margin: 20px auto; 
       background: white; 
-      padding: 20px; 
-      border-radius: 20px; 
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      border: 3px solid #ffcc00;
-    }
-    
-    .badge { 
-      background: var(--premium); 
-      color: #000; 
-      padding: 8px 16px; 
-      border-radius: 20px; 
-      font-size: 14px; 
-      position: absolute; 
-      top: -10px; 
-      right: -10px; 
-      font-weight: bold;
-      box-shadow: 0 5px 15px rgba(255,204,0,0.3);
-    }
-    
-    .countdown { 
-      background: rgba(255,204,0,0.2); 
       padding: 15px; 
-      border-radius: 12px; 
-      margin: 20px 0; 
-      font-weight: bold; 
-      color: var(--accent);
-      text-align: center;
-      border: 1px solid rgba(255,204,0,0.3);
+      border-radius: 16px; 
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     }
     
-    .feature-grid { 
-      display: grid; 
-      grid-template-columns: 1fr 1fr; 
-      gap: 15px; 
-      margin: 20px 0;
-    }
-    
-    .feature-card { 
-      background: rgba(255,255,255,0.05); 
-      padding: 15px; 
-      border-radius: 12px; 
-      text-align: center;
-      border: 1px solid rgba(255,255,255,0.1);
-      transition: all 0.3s;
-    }
-    .feature-card:hover {
-      background: rgba(255,255,255,0.1);
-      transform: translateY(-5px);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    }
-    
+    .status { margin: 20px 0; font-weight: bold; color: var(--accent); }
+    #pixInfo { background: #222; padding: 15px; border-radius: 8px; margin: 20px 0; font-size: 14px; word-break: break-all; }
+    .hidden { display: none !important; }
+    .badge { background: #ff3b30; color: white; padding: 5px 10px; border-radius: 20px; font-size: 14px; position: absolute; top: -10px; right: -10px; }
+    .countdown { background: #333; padding: 10px; border-radius: 8px; margin: 15px 0; font-weight: bold; color: var(--accent); }
+    .free-tag { background: #00c853; padding: 5px 10px; border-radius: 4px; font-size: 12px; margin-left: 10px; }
+
     /* ⬆️ BOTÃO VOLTAR AO TOPO */
     #backToTop {
       position: fixed;
@@ -275,14 +128,10 @@
       cursor: pointer;
       z-index: 100;
       opacity: 0;
-      transition: all 0.3s;
+      transition: opacity 0.3s;
     }
     #backToTop.visible {
       opacity: 1;
-    }
-    #backToTop:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 25px rgba(255,45,85,0.6);
     }
   </style>
 </head>
@@ -301,204 +150,273 @@
   <div id="backToTop">↑</div>
 
   <div class="container">
-    <!-- BOTÃO DE VOLTAR (APARECE NAS ETAPAS 2+) -->
-    <button class="back-btn hidden" id="backBtn">←</button>
-    
-    <div class="badge">🚀 VERSÃO FINAL</div>
-    <h1>UM2 PRODUTOR</h1>
-    <p style="text-align: center; margin-bottom: 30px;">IA Studio — Sem login, sem cartão. Produza em 1 minuto.</p>
+    <div class="badge">🔥 NOVO!</div>
+    <h1>🎤 UM2 PRODUTOR</h1>
+    <p>Envie seu beat, grave sua voz. A IA faz o milagre.</p>
 
     <!-- CONTADOR REGRESSIVO -->
     <div class="countdown" id="countdown">
-      ⏳ Plano Ilimitado R$49 até <span id="endDate">--/--</span>
+      ⏳ Oferta por tempo limitado: Plano Ilimitado R$49 até <span id="endDate">--/--</span>
     </div>
 
     <!-- BOTÃO PLANO PREMIUM -->
-    <button class="premium" id="premiumBtn">💎 ASSINE ILIMITADO — R$49/mês</button>
+    <button id="premiumBtn">💎 ASSINE PLANO ILIMITADO — R$49/mês</button>
 
-    <!-- ETAPA 1: ESCOLHER MODO -->
+    <hr style="margin: 25px 0; opacity: 0.3;">
+
+    <p>OU pague por música:</p>
+    <!-- ETAPA 1: UPLOAD OU GRAVAÇÃO -->
     <div id="step1">
-      <h2>Como quer produzir?</h2>
-      <div class="feature-grid">
-        <div class="feature-card" onclick="selectMode('upload')">
-          🎧 Upload de Beat<br><small>Traga seu instrumental</small>
-        </div>
-        <div class="feature-card" onclick="selectMode('generate')">
-          🎹 Gerar Beat por IA<br><small>Estilo que quiser</small>
-        </div>
-      </div>
-    </div>
-
-    <!-- ETAPA 2: CONFIGURAÇÕES -->
-    <div id="config" class="hidden">
-      <h2>Configurações da Produção</h2>
-      
-      <select id="genre" class="secondary">
-        <option value="">🎵 Estilo Musical</option>
-        <option value="pop">Pop Moderno</option>
-        <option value="funk">Funk 2025</option>
-        <option value="trap">Trap Brasileiro</option>
-        <option value="sertanejo">Sertanejo Universitário</option>
-        <option value="rock">Rock Alternativo</option>
-        <option value="eletronica">Eletrônica Festival</option>
-      </select>
-
-      <input type="text" id="mood" class="secondary" placeholder="💡 Humor (ex: energético, romântico, agressivo)" />
-
-      <select id="voiceType" class="secondary">
-        <option value="">🎤 Tipo de Voz</option>
-        <option value="feminina-suave">Feminina Suave</option>
-        <option value="feminina-potente">Feminina Potente</option>
-        <option value="masculina-grave">Masculina Grave</option>
-        <option value="masculina-aguda">Masculina Águda</option>
-        <option value="infantil">Infantil</option>
-      </select>
-
-      <input type="text" id="lyricsTheme" class="secondary" placeholder="📝 Tema da Letra (ex: amor, festa, superação)" />
-
-      <button id="configNext" class="secondary">➡️ Avançar para Gravação</button>
-    </div>
-
-    <!-- ETAPA 3: GRAVAÇÃO DE VOZ -->
-    <div id="recording" class="hidden">
-      <h2>🎙️ Grave Sua Voz</h2>
-      <div id="timer">Toque em "GRAVAR" para começar</div>
+      <input type="file" id="upload" accept="audio/*" />
+      <p>OU</p>
       
       <!-- 🎧 PLAYER PARA OUVIR BEAT ENQUANTO GRAVA -->
-      <audio id="beatPlayer" controls style="width: 100%; margin: 20px 0; background: rgba(255,255,255,0.1); border-radius: 12px; padding: 10px;"></audio>
+      <audio id="beatPlayer" controls style="width: 90%; margin: 15px auto; display: none;"></audio>
       
-      <button id="recordBtn" class="secondary">▶️ GRAVAR VOZ (até 3m54s)</button>
-      <button id="stopBtn" class="secondary hidden">⏹️ PARAR GRAVAÇÃO</button>
-      <button id="produceBtn" disabled>🎨 Produzir com IA (Mix + Master)</button>
+      <button id="recordBtn">🎙️ Gravar Minha Voz</button>
+      <button id="nextBtn" disabled>➡️ Processar com IA</button>
     </div>
 
-    <!-- ETAPA 4: PROCESSANDO -->
+    <!-- ETAPA 2: PROCESSANDO -->
     <div id="processing" class="hidden">
-      <div class="status">
-        🎧 Separando voz e beat...<br>
-        🎹 Gerando harmonias...<br>
-        🎚️ Mixando e masterizando...<br>
-        ⏳ Aguarde 30 segundos...
-      </div>
+      <p class="status">⏳ A IA está fazendo o milagre... (3s)</p>
     </div>
 
-    <!-- ETAPA 5: RESULTADO -->
+    <!-- ETAPA 3: OUVIR RESULTADO -->
     <div id="result" class="hidden">
-      <h2>✅ Produção Finalizada!</h2>
+      <p>✅ Produção finalizada em alta qualidade!</p>
       <audio id="player" controls></audio>
-      <div class="section">
-        <h3>🔊 Ouvir Preview (grátis)</h3>
-        <button id="payBtn">💰 Pagar R$11,00 e Baixar WAV + MP3</button>
+      <div id="payOrFree">
+        <button id="payBtn">💰 Pagar R$11,00 e Baixar</button>
+        <span class="free-tag" id="freeTag">Ilimitado para assinantes</span>
       </div>
     </div>
 
-    <!-- ETAPA 6: PAGAMENTO -->
+    <!-- ETAPA 4: PAGAMENTO -->
     <div id="payment" class="hidden">
-      <h2>📲 Pague via PIX</h2>
-      <div class="status">Chave PIX: 21977290154</div>
+      <p>📲 Pague via PIX para liberar o download</p>
+      <div id="pixInfo">Chave PIX: <strong>21977290154</strong></div>
       <div id="qrcode">
         <!-- QR CODE FUNCIONAL PARA O PIX 21977290154 -->
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=00020101021226840014br.gov.bcb.pix2562qrcodespix.bcb.gov.br/pix/v2/21977290154520400005303986540511.005802BR5913UM2 PRODUTOR6008BRASILIA62070503***6304****" alt="QR Code PIX" />
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=pix://21977290154" alt="QR Code PIX" />
       </div>
-      <p style="margin: 15px 0; font-size: 14px;">Após pagar, clique em:</p>
-      <button id="confirmPay" class="secondary">✅ Já paguei, liberar download</button>
-      <p style="margin: 15px 0; font-size: 12px; color: #aaa;">
-        O pagamento é confirmado manualmente por enquanto. Em breve: confirmação automática via webhook.
-      </p>
+      <p>Após pagar, clique em:</p>
+      <button id="confirmPay">✅ Confirmar Pagamento</button>
     </div>
 
-    <!-- ETAPA 7: DOWNLOAD -->
+    <!-- ETAPA 5: DOWNLOAD -->
     <div id="download" class="hidden">
-      <h2>🎉 Download Liberado!</h2>
-      <div class="feature-grid">
-        <button id="downloadWav" class="secondary">⬇️ WAV (Masterizado)</button>
-        <button id="downloadMp3" class="secondary">⬇️ MP3 (Redes Sociais)</button>
-      </div>
-      <p style="margin-top: 20px; text-align: center; font-size: 14px;">Assinante? Produza quantas músicas quiser! 🚀</p>
+      <p>🎉 Baixe seus áudios:</p>
+      <button id="downloadWav">⬇️ Baixar WAV (Alta Qualidade)</button>
+      <button id="downloadMp3">⬇️ Baixar MP3 (Para Redes)</button>
+      <p style="margin-top: 20px; font-size: 14px;">Assinante? Produza quantas músicas quiser! 🚀</p>
     </div>
   </div>
 
   <script>
     // ELEMENTOS
-    const step1 = document.getElementById('step1');
-    const config = document.getElementById('config');
-    const recording = document.getElementById('recording');
+    const upload = document.getElementById('upload');
+    const recordBtn = document.getElementById('recordBtn');
+    const nextBtn = document.getElementById('nextBtn');
     const processing = document.getElementById('processing');
     const result = document.getElementById('result');
-    const payment = document.getElementById('payment');
-    const download = document.getElementById('download');
     const player = document.getElementById('player');
     const beatPlayer = document.getElementById('beatPlayer');
-    const timer = document.getElementById('timer');
+    const payBtn = document.getElementById('payBtn');
+    const payment = document.getElementById('payment');
+    const confirmPay = document.getElementById('confirmPay');
+    const download = document.getElementById('download');
+    const downloadWav = document.getElementById('downloadWav');
+    const downloadMp3 = document.getElementById('downloadMp3');
+    const step1 = document.getElementById('step1');
+    const premiumBtn = document.getElementById('premiumBtn');
     const countdownEl = document.getElementById('countdown');
     const endDateEl = document.getElementById('endDate');
-    const backBtn = document.getElementById('backBtn');
+    const freeTag = document.getElementById('freeTag');
+    const payOrFree = document.getElementById('payOrFree');
     const backToTop = document.getElementById('backToTop');
 
     let audioBlob = null;
-    let mediaRecorder = null;
-    let stream = null;
-    let isRecording = false;
-    let startTime = 0;
-    let timerInterval = null;
-    let jobId = null;
-
-    // ESTADO DAS SELEÇÕES (para não perder ao voltar)
-    const state = {
-      mode: null,
-      genre: '',
-      mood: '',
-      voiceType: '',
-      lyricsTheme: '',
-      beatFile: null
-    };
 
     // DATA DO CARNAVAL 2026
     const offerEndDate = new Date('2026-02-15T23:59:59');
     endDateEl.innerText = offerEndDate.toLocaleDateString('pt-BR');
 
-    // VERIFICA ASSINATURA
+    // VERIFICA SE USUÁRIO JÁ É ASSINANTE
     function checkPremium() {
       const premiumData = localStorage.getItem('um2_premium');
       if (premiumData) {
         const { expiry } = JSON.parse(premiumData);
-        if (new Date() < new Date(expiry)) return true;
-        else localStorage.removeItem('um2_premium');
+        if (new Date() < new Date(expiry)) {
+          return true;
+        } else {
+          localStorage.removeItem('um2_premium');
+        }
       }
       return false;
     }
 
-    // MOSTRA/ESCONDE BOTÃO DE VOLTAR
-    function updateBackButton() {
-      if (config.classList.contains('hidden') && 
-          recording.classList.contains('hidden') && 
-          processing.classList.contains('hidden') && 
-          result.classList.contains('hidden') && 
-          payment.classList.contains('hidden') && 
-          download.classList.contains('hidden')) {
-        backBtn.classList.add('hidden');
+    // ATUALIZA INTERFACE SE FOR ASSINANTE
+    function updateUIForPremium() {
+      if (checkPremium()) {
+        payBtn.classList.add('hidden');
+        freeTag.classList.remove('hidden');
       } else {
-        backBtn.classList.remove('hidden');
+        payBtn.classList.remove('hidden');
+        freeTag.classList.add('hidden');
       }
     }
 
-    // VOLTA PARA ETAPA ANTERIOR
-    backBtn.addEventListener('click', () => {
-      if (!payment.classList.contains('hidden') || !download.classList.contains('hidden')) {
-        payment.classList.add('hidden');
-        download.classList.add('hidden');
-        result.classList.remove('hidden');
-      } else if (!result.classList.contains('hidden')) {
-        result.classList.add('hidden');
-        recording.classList.remove('hidden');
-      } else if (!recording.classList.contains('hidden')) {
-        recording.classList.add('hidden');
-        config.classList.remove('hidden');
-      } else if (!config.classList.contains('hidden')) {
-        config.classList.add('hidden');
-        step1.classList.remove('hidden');
+    // ASSINAR PLANO PREMIUM
+    premiumBtn.addEventListener('click', () => {
+      alert("💎 Você está assinando o plano ILIMITADO por R$49!\n\nNa versão real, isso abriria o PIX para 21977290154 com txid de assinatura.");
+
+      const expiryDate = new Date();
+      expiryDate.setDate(expiryDate.getDate() + 30);
+
+      localStorage.setItem('um2_premium', JSON.stringify({
+        subscribedAt: new Date(),
+        expiry: expiryDate
+      }));
+
+      alert("✅ Assinatura ativada! Você pode baixar quantas músicas quiser pelos próximos 30 dias.");
+      updateUIForPremium();
+    });
+
+    // UPLOAD DE BEAT + PLAYER VISÍVEL
+    upload.addEventListener('change', () => {
+      if (upload.files.length > 0) {
+        nextBtn.disabled = false;
+        const fileURL = URL.createObjectURL(upload.files[0]);
+        beatPlayer.src = fileURL;
+        beatPlayer.style.display = "block";
       }
-      updateBackButton();
+    });
+
+    // GRAVAÇÃO DE VOZ REAL — COM LIMITE POR PLANO
+    recordBtn.addEventListener('click', async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const mediaRecorder = new MediaRecorder(stream);
+        const chunks = [];
+        const isPremium = checkPremium();
+        const maxDuration = isPremium ? 420000 : 234000; // 7min ou 3m54s
+        let startTime = Date.now();
+        let timerInterval;
+
+        let timerDisplay = document.createElement('div');
+        timerDisplay.id = 'timer';
+        timerDisplay.style.margin = '10px 0';
+        timerDisplay.style.fontSize = '16px';
+        timerDisplay.style.color = '#ffcc00';
+        document.getElementById('step1').appendChild(timerDisplay);
+
+        mediaRecorder.ondataavailable = e => chunks.push(e.data);
+        mediaRecorder.onstop = () => {
+          clearInterval(timerInterval);
+          audioBlob = new Blob(chunks, { type: 'audio/wav' });
+          nextBtn.disabled = false;
+          stream.getTracks().forEach(track => track.stop());
+          if (timerDisplay) timerDisplay.remove();
+          alert(`✅ Gravação concluída! (${isPremium ? '7min' : '3min54s'} máximo)`);
+        };
+
+        mediaRecorder.start();
+
+        timerInterval = setInterval(() => {
+          let elapsed = Date.now() - startTime;
+          let remaining = Math.max(0, Math.floor((maxDuration - elapsed) / 1000));
+          if (timerDisplay) {
+            timerDisplay.innerText = `⏳ Tempo restante: ${Math.floor(remaining / 60)}:${String(remaining % 60).padStart(2, '0')}`;
+          }
+          if (elapsed >= maxDuration) {
+            mediaRecorder.stop();
+          }
+        }, 1000);
+
+      } catch (err) {
+        alert("Erro ao acessar microfone: " + err.message);
+      }
+    });
+
+    // PROCESSAR COM IA (SEM BLOQUEIO — USUÁRIO PODE OUVIR SEM PAGAR)
+    nextBtn.addEventListener('click', () => {
+      step1.classList.add('hidden');
+      processing.classList.remove('hidden');
+
+      setTimeout(() => {
+        processing.classList.add('hidden');
+        result.classList.remove('hidden');
+
+        const fakeAudioUrl = "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav";
+        player.src = fakeAudioUrl;
+        player.style.display = "block";
+        updateUIForPremium();
+      }, 3000);
+    });
+
+    // IR PARA PAGAMENTO
+    payBtn.addEventListener('click', () => {
+      result.classList.add('hidden');
+      payment.classList.remove('hidden');
+    });
+
+    // CONFIRMAR PAGAMENTO (SIMULA WEBHOOK)
+    confirmPay.addEventListener('click', () => {
+      payment.classList.add('hidden');
+      localStorage.setItem('um2_paid_single', Date.now());
+      download.classList.remove('hidden');
+      
+      // Simula comprovação de pagamento
+      alert("✅ Pagamento confirmado! Em produção real, isso seria automático via webhook do Banco Inter.");
+    });
+
+    // DOWNLOADS (SÓ SE PAGO OU ASSINANTE)
+    downloadWav.addEventListener('click', () => {
+      const isPremium = checkPremium();
+      const hasPaid = localStorage.getItem('um2_paid_single');
+
+      if (!isPremium && !hasPaid) {
+        alert("⚠️ Pague R$11 ou assine o plano ilimitado para baixar.");
+        payment.classList.remove('hidden');
+        return;
+      }
+
+      downloadFile("producao_um2.wav", "audio/wav");
+    });
+
+    downloadMp3.addEventListener('click', () => {
+      const isPremium = checkPremium();
+      const hasPaid = localStorage.getItem('um2_paid_single');
+
+      if (!isPremium && !hasPaid) {
+        alert("⚠️ Pague R$11 ou assine o plano ilimitado para baixar.");
+        payment.classList.remove('hidden');
+        return;
+      }
+
+      downloadFile("producao_um2.mp3", "audio/mpeg");
+    });
+
+    function downloadFile(filename, type) {
+      const url = URL.createObjectURL(new Blob(["fake audio data - substitua pela IA real"], { type }));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // AO CARREGAR, VERIFICA ASSINATURA
+    window.addEventListener('load', () => {
+      updateUIForPremium();
+      const hasPaid = localStorage.getItem('um2_paid_single');
+      const isPremium = checkPremium();
+      if ((hasPaid || isPremium) && player.src) {
+        download.classList.remove('hidden');
+      }
     });
 
     // SCROLL PARA VOLTAR AO TOPO
@@ -513,99 +431,6 @@
     backToTop.addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-
-    // SELECIONAR MODO
-    function selectMode(mode) {
-      state.mode = mode;
-      step1.classList.add('hidden');
-      config.classList.remove('hidden');
-      updateBackButton();
-      
-      if (mode === 'upload') {
-        // Adiciona input de upload dinamicamente (se ainda não existir)
-        if (!document.getElementById('uploadBeat')) {
-          const uploadInput = document.createElement('input');
-          uploadInput.type = 'file';
-          uploadInput.accept = 'audio/*';
-          uploadInput.id = 'uploadBeat';
-          uploadInput.style.width = '100%';
-          uploadInput.style.padding = '16px';
-          uploadInput.style.margin = '12px 0';
-          uploadInput.style.borderRadius = '12px';
-          uploadInput.style.background = 'rgba(255,255,255,0.1)';
-          uploadInput.onchange = (e) => {
-            state.beatFile = e.target.files[0];
-            if (state.beatFile) {
-              const fileURL = URL.createObjectURL(state.beatFile);
-              beatPlayer.src = fileURL;
-              document.getElementById('configNext').disabled = false;
-            }
-          };
-          config.insertBefore(uploadInput, document.getElementById('genre'));
-        }
-      }
-    }
-
-    // CARREGAR ESTADO ANTERIOR NOS CAMPOS
-    function loadState() {
-      document.getElementById('genre').value = state.genre;
-      document.getElementById('mood').value = state.mood;
-      document.getElementById('voiceType').value = state.voiceType;
-      document.getElementById('lyricsTheme').value = state.lyricsTheme;
-    }
-
-    // SALVAR ESTADO AO AVANÇAR
-    document.getElementById('configNext').addEventListener('click', () => {
-      state.genre = document.getElementById('genre').value;
-      state.mood = document.getElementById('mood').value;
-      state.voiceType = document.getElementById('voiceType').value;
-      state.lyricsTheme = document.getElementById('lyricsTheme').value;
-
-      if (!state.genre || !state.voiceType) {
-        alert("⚠️ Selecione pelo menos o estilo musical e tipo de voz!");
-        return;
-      }
-      config.classList.add('hidden');
-      recording.classList.remove('hidden');
-      updateBackButton();
-      
-      // Se tiver beat, carrega no player
-      if (state.beatFile) {
-        const fileURL = URL.createObjectURL(state.beatFile);
-        beatPlayer.src = fileURL;
-        beatPlayer.style.display = 'block';
-      }
-    });
-
-    // GRAVAR VOZ (OUVINDO BEAT AO MESMO TEMPO)
-    document.getElementById('recordBtn').addEventListener('click', async () => {
-      try {
-        stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        mediaRecorder = new MediaRecorder(stream);
-        const chunks = [];
-        
-        mediaRecorder.ondataavailable = e => chunks.push(e.data);
-        mediaRecorder.onstop = () => {
-          audioBlob = new Blob(chunks, { type: 'audio/wav' });
-          document.getElementById('produceBtn').disabled = false;
-          isRecording = false;
-        };
-
-        mediaRecorder.start();
-        isRecording = true;
-        startTime = Date.now();
-        document.getElementById('recordBtn').classList.add('hidden');
-        document.getElementById('stopBtn').classList.remove('hidden');
-
-        timerInterval = setInterval(() => {
-          const elapsed = Date.now() - startTime;
-          const isPremium = checkPremium();
-          const maxDuration = isPremium ? 420000 : 234000;
-          const remaining = Math.max(0, Math.floor((maxDuration - elapsed) / 1000));
-          const minutes = Math.floor(remaining / 60);
-          const seconds = String(remaining % 60).padStart(2, '0');
-          timer.innerText = `⏳ Gravando: ${minutes}:${seconds} (máx: ${isPremium ? '7min' : '3m54s'})`;
-          if (elapsed >= maxDuration) {
-            mediaRecorder.stop();
-            stream.getTracks().forEach(track => track.stop());
-            document.getElementById('stopBtn').classLi
+  </script>
+</body>
+  </html>
