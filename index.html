@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>UM2 PRODUTOR — IA + PIX + PLANO ILIMITADO</title>
+  <title>UM2 PRODUTOR — IA PROFISSIONAL + PIX</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
     body { background: #0f0f1a; color: white; padding: 20px; text-align: center; }
@@ -11,7 +11,7 @@
     .container { max-width: 600px; margin: 0 auto; background: #1a1a2e; padding: 30px; border-radius: 16px; position: relative; }
     button { background: #ff2d55; color: white; border: none; padding: 14px 28px; margin: 10px 0; border-radius: 8px; font-size: 18px; cursor: pointer; }
     button:disabled { background: #555; cursor: not-allowed; }
-    #upload, #recordBtn { background: #4a9eff; }
+    #upload, #recordBtn, #generateBtn { background: #4a9eff; }
     #premiumBtn { background: #ffcc00; color: #000; font-weight: bold; }
     #player { margin: 20px auto; width: 90%; display: none; }
     #payment, #download { display: none; }
@@ -21,48 +21,80 @@
     .hidden { display: none !important; }
     .badge { background: #ff3b30; color: white; padding: 5px 10px; border-radius: 20px; font-size: 14px; position: absolute; top: -10px; right: -10px; }
     .countdown { background: #333; padding: 10px; border-radius: 8px; margin: 15px 0; font-weight: bold; color: #ffcc00; }
+    select, input { padding: 12px; margin: 10px 0; border-radius: 8px; width: 100%; background: #2a2a3e; color: white; border: 1px solid #444; }
+    #timer { margin: 10px 0; font-size: 16px; color: #ffcc00; }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="badge">🔥 NOVO!</div>
+    <div class="badge">🔥 PRO</div>
     <h1>🎤 UM2 PRODUTOR</h1>
-    <p>Envie seu beat, grave sua voz. A IA faz o milagre.</p>
+    <p>Produção profissional com IA — sem fake, sem simulação.</p>
 
     <!-- CONTADOR REGRESSIVO -->
     <div class="countdown" id="countdown">
-      ⏳ Oferta por tempo limitado: Plano Ilimitado R$49 até <span id="endDate">--/--</span>
+      ⏳ Plano Ilimitado R$49 até <span id="endDate">--/--</span>
     </div>
 
     <!-- BOTÃO PLANO PREMIUM -->
-    <button id="premiumBtn">💎 ASSINE PLANO ILIMITADO — R$49/mês</button>
+    <button id="premiumBtn">💎 ASSINE ILIMITADO — R$49/mês</button>
 
     <hr style="margin: 25px 0; opacity: 0.3;">
 
-    <p>OU pague por música:</p>
-    <!-- ETAPA 1: UPLOAD OU GRAVAÇÃO -->
-    <div id="step1">
-      <input type="file" id="upload" accept="audio/*" />
+    <!-- ETAPA 0: GERAR INSTRUMENTAL OU UPLOAD -->
+    <div id="step0">
+      <button id="generateBtn">🎹 Gerar Instrumental por IA</button>
       <p>OU</p>
-      <button id="recordBtn">🎙️ Gravar Minha Voz</button>
-      <button id="nextBtn" disabled>➡️ Processar com IA</button>
+      <input type="file" id="upload" accept="audio/*" placeholder="Upload de Beat" />
+    </div>
+
+    <!-- ETAPA 0.5: CONFIGURAÇÕES DE IA -->
+    <div id="config" class="hidden">
+      <select id="genre">
+        <option value="">Escolha o estilo musical</option>
+        <option value="pop">Pop</option>
+        <option value="funk">Funk</option>
+        <option value="trap">Trap</option>
+        <option value="sertanejo">Sertanejo</option>
+        <option value="rock">Rock</option>
+        <option value="eletrônica">Eletrônica</option>
+      </select>
+
+      <input type="text" id="prompt" placeholder="Descreva o instrumental (ex: batida energética com synth)" />
+
+      <select id="voiceType">
+        <option value="">Escolha a voz da IA</option>
+        <option value="feminina">Voz Feminina</option>
+        <option value="masculina">Voz Masculina</option>
+      </select>
+
+      <input type="text" id="lyricsPrompt" placeholder="Tema da letra (ex: amor, superação, festa)" />
+
+      <button id="generateConfigBtn">✅ Confirmar e Avançar</button>
+    </div>
+
+    <!-- ETAPA 1: GRAVAÇÃO DE VOZ -->
+    <div id="step1" class="hidden">
+      <div id="timer"></div>
+      <button id="recordBtn">🎙️ Gravar Minha Voz (até 3m54s)</button>
+      <button id="nextBtn" disabled>➡️ Produzir com IA Profissional</button>
     </div>
 
     <!-- ETAPA 2: PROCESSANDO -->
     <div id="processing" class="hidden">
-      <p class="status">⏳ A IA está fazendo o milagre... (3s)</p>
+      <p class="status">⏳ Gerando letra, voz, mixando e masterizando...</p>
     </div>
 
     <!-- ETAPA 3: OUVIR RESULTADO -->
     <div id="result" class="hidden">
-      <p>✅ Produção finalizada em alta qualidade!</p>
+      <p>✅ Produção FINALIZADA — mixada e masterizada!</p>
       <audio id="player" controls></audio>
-      <button id="payBtn">💰 Pagar R$11,00 e Baixar</button>
+      <button id="payBtn">💰 Pagar R$11,00 e Baixar WAV + MP3</button>
     </div>
 
     <!-- ETAPA 4: PAGAMENTO -->
     <div id="payment" class="hidden">
-      <p>📲 Pague via PIX para liberar o download</p>
+      <p>📲 Pague via PIX para liberar download</p>
       <div id="pixInfo">Chave PIX: <strong>21977290154</strong></div>
       <div id="qrcode">
         <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=pix://21977290154" alt="QR Code PIX" />
@@ -73,16 +105,24 @@
 
     <!-- ETAPA 5: DOWNLOAD -->
     <div id="download" class="hidden">
-      <p>🎉 Baixe seus áudios:</p>
-      <button id="downloadWav">⬇️ Baixar WAV (Alta Qualidade)</button>
+      <p>🎉 Produção liberada! Baixe em alta qualidade:</p>
+      <button id="downloadWav">⬇️ Baixar WAV (Masterizado)</button>
       <button id="downloadMp3">⬇️ Baixar MP3 (Para Redes)</button>
-      <p style="margin-top: 20px; font-size: 14px;">Assinante? Produza quantas músicas quiser! 🚀</p>
     </div>
   </div>
 
   <script>
     // ELEMENTOS
+    const generateBtn = document.getElementById('generateBtn');
     const upload = document.getElementById('upload');
+    const config = document.getElementById('config');
+    const genre = document.getElementById('genre');
+    const prompt = document.getElementById('prompt');
+    const voiceType = document.getElementById('voiceType');
+    const lyricsPrompt = document.getElementById('lyricsPrompt');
+    const generateConfigBtn = document.getElementById('generateConfigBtn');
+    const step0 = document.getElementById('step0');
+    const step1 = document.getElementById('step1');
     const recordBtn = document.getElementById('recordBtn');
     const nextBtn = document.getElementById('nextBtn');
     const processing = document.getElementById('processing');
@@ -94,68 +134,70 @@
     const download = document.getElementById('download');
     const downloadWav = document.getElementById('downloadWav');
     const downloadMp3 = document.getElementById('downloadMp3');
-    const step1 = document.getElementById('step1');
-    const premiumBtn = document.getElementById('premiumBtn');
     const countdownEl = document.getElementById('countdown');
     const endDateEl = document.getElementById('endDate');
+    const timerDisplay = document.getElementById('timer');
 
     let audioBlob = null;
+    let backendUrl = 'https://um2-backend.vercel.app';
 
-    // CONFIGURA DATA DE EXPIRAÇÃO DA OFERTA (ATÉ CARNAVAL 2026 — 15/02/2026)
+    // DATA DO CARNAVAL 2026
     const offerEndDate = new Date('2026-02-15T23:59:59');
     endDateEl.innerText = offerEndDate.toLocaleDateString('pt-BR');
 
-    // VERIFICA SE USUÁRIO JÁ É ASSINANTE
+    // VERIFICA ASSINATURA
     function checkPremium() {
       const premiumData = localStorage.getItem('um2_premium');
       if (premiumData) {
         const { expiry } = JSON.parse(premiumData);
-        if (new Date() < new Date(expiry)) {
-          return true;
-        } else {
-          localStorage.removeItem('um2_premium');
-        }
+        if (new Date() < new Date(expiry)) return true;
+        else localStorage.removeItem('um2_premium');
       }
       return false;
     }
 
-    // ASSINAR PLANO PREMIUM
+    // ASSINAR PLANO ILIMITADO
     premiumBtn.addEventListener('click', () => {
-      alert("💎 Você está assinando o plano ILIMITADO por R$49!\n\nNa versão real, isso abriria o PIX para 21977290154 com txid de assinatura.");
-
-      const expiryDate = new Date();
-      expiryDate.setDate(expiryDate.getDate() + 30);
-
-      localStorage.setItem('um2_premium', JSON.stringify({
-        subscribedAt: new Date(),
-        expiry: expiryDate
-      }));
-
-      alert("✅ Assinatura ativada! Você pode baixar quantas músicas quiser pelos próximos 30 dias.");
+      alert("💎 Assinatura ilimitada ativada por 30 dias após pagamento.");
+      window.location.href = `${backendUrl}/subscribe-premium`;
     });
 
-    // HABILITAR PRÓXIMO PASSO APÓS UPLOAD OU GRAVAÇÃO
+    // GERAR INSTRUMENTAL
+    generateBtn.addEventListener('click', () => {
+      step0.classList.add('hidden');
+      config.classList.remove('hidden');
+    });
+
+    // UPLOAD DE BEAT
     upload.addEventListener('change', () => {
-      if (upload.files.length > 0) nextBtn.disabled = false;
+      if (upload.files.length > 0) {
+        step0.classList.add('hidden');
+        config.classList.remove('hidden');
+      }
     });
 
-    // GRAVAÇÃO DE VOZ REAL — COM LIMITE POR PLANO
+    // CONFIRMAR CONFIGURAÇÕES
+    generateConfigBtn.addEventListener('click', () => {
+      if (!genre.value || !voiceType.value || !lyricsPrompt.value) {
+        alert("Preencha todos os campos!");
+        return;
+      }
+      config.classList.add('hidden');
+      step1.classList.remove('hidden');
+    });
+
+    // GRAVAÇÃO DE VOZ REAL
     recordBtn.addEventListener('click', async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         const mediaRecorder = new MediaRecorder(stream);
         const chunks = [];
         const isPremium = checkPremium();
-        const maxDuration = isPremium ? 420000 : 234000; // 7min ou 3m54s
+        const maxDuration = isPremium ? 420000 : 234000;
         let startTime = Date.now();
         let timerInterval;
 
-        let timerDisplay = document.createElement('div');
-        timerDisplay.id = 'timer';
-        timerDisplay.style.margin = '10px 0';
-        timerDisplay.style.fontSize = '16px';
-        timerDisplay.style.color = '#ffcc00';
-        document.getElementById('step1').appendChild(timerDisplay);
+        timerDisplay.innerText = "⏳ Gravando... 00:00";
 
         mediaRecorder.ondataavailable = e => chunks.push(e.data);
         mediaRecorder.onstop = () => {
@@ -163,8 +205,7 @@
           audioBlob = new Blob(chunks, { type: 'audio/wav' });
           nextBtn.disabled = false;
           stream.getTracks().forEach(track => track.stop());
-          if (timerDisplay) timerDisplay.remove();
-          alert(`✅ Gravação concluída! (${isPremium ? '7min' : '3min54s'} máximo)`);
+          alert(`✅ Gravação concluída! (${isPremium ? '7min' : '3m54s'})`);
         };
 
         mediaRecorder.start();
@@ -172,12 +213,10 @@
         timerInterval = setInterval(() => {
           let elapsed = Date.now() - startTime;
           let remaining = Math.max(0, Math.floor((maxDuration - elapsed) / 1000));
-          if (timerDisplay) {
-            timerDisplay.innerText = `⏳ Tempo restante: ${Math.floor(remaining / 60)}:${String(remaining % 60).padStart(2, '0')}`;
-          }
-          if (elapsed >= maxDuration) {
-            mediaRecorder.stop();
-          }
+          let minutes = Math.floor(remaining / 60);
+          let seconds = String(remaining % 60).padStart(2, '0');
+          timerDisplay.innerText = `⏳ Gravando... ${minutes}:${seconds}`;
+          if (elapsed >= maxDuration) mediaRecorder.stop();
         }, 1000);
 
       } catch (err) {
@@ -185,21 +224,27 @@
       }
     });
 
-    // ✅ PROCESSAR COM IA REAL (CHAMANDO BACKEND)
+    // PRODUZIR COM IA PROFISSIONAL
     nextBtn.addEventListener('click', () => {
       step1.classList.add('hidden');
       processing.classList.remove('hidden');
 
       const formData = new FormData();
-      formData.append('audio', audioBlob, 'voice.wav');
+      if (audioBlob) formData.append('voice', audioBlob, 'voice.wav');
+      if (upload.files[0]) formData.append('beat', upload.files[0]);
+      formData.append('genre', genre.value);
+      formData.append('prompt', prompt.value);
+      formData.append('voiceType', voiceType.value);
+      formData.append('lyricsPrompt', lyricsPrompt.value);
       formData.append('isPremium', checkPremium() ? '1' : '0');
 
-      fetch('https://um2-backend.vercel.app/process', {
+      fetch(`${backendUrl}/produce`, {
         method: 'POST',
         body: formData
       })
       .then(r => r.json())
       .then(data => {
+        if (data.error) throw new Error(data.error);
         processing.classList.add('hidden');
         result.classList.remove('hidden');
         player.src = data.url;
@@ -207,24 +252,24 @@
         localStorage.setItem('um2_job_id', data.jobId);
       })
       .catch(err => {
-        alert("Erro ao processar com IA: " + err.message);
+        alert("Erro na produção: " + err.message);
         processing.classList.add('hidden');
         step1.classList.remove('hidden');
       });
     });
 
-    // ✅ IR PARA PAGAMENTO (GERA COBRANÇA REAL)
+    // PAGAR R$11
     payBtn.addEventListener('click', () => {
       const jobId = localStorage.getItem('um2_job_id');
       if (!jobId) {
-        alert("Erro: nenhum job ativo");
+        alert("Erro: produção não encontrada");
         return;
       }
 
       result.classList.add('hidden');
       processing.classList.remove('hidden');
 
-      fetch('https://um2-backend.vercel.app/create-pix', {
+      fetch(`${backendUrl}/create-pix`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ jobId, plan: 'single' })
@@ -233,24 +278,22 @@
       .then(data => {
         processing.classList.add('hidden');
         payment.classList.remove('hidden');
-        
-        document.getElementById('pixInfo').innerHTML = `Valor: R$${data.amount}<br>Descrição: ${data.description}`;
-        document.getElementById('qrcode').innerHTML = `<img src="${data.qrCode}" alt="QR Code PIX" style="width:200px;height:200px;">`;
-        
+        document.getElementById('pixInfo').innerHTML = `R$${data.amount} - ${data.description}`;
+        document.getElementById('qrcode').innerHTML = `<img src="${data.qrCode}" style="width:200px;height:200px;">`;
         localStorage.setItem('um2_txid', data.txid);
       })
       .catch(err => {
-        alert("Erro ao gerar cobrança: " + err.message);
+        alert("Erro ao gerar PIX: " + err.message);
         processing.classList.add('hidden');
         result.classList.remove('hidden');
       });
     });
 
-    // ✅ CONFIRMAR PAGAMENTO (VERIFICA SE FOI PAGO VIA BACKEND)
+    // CONFIRMAR PAGAMENTO
     confirmPay.addEventListener('click', () => {
       const jobId = localStorage.getItem('um2_job_id');
       if (!jobId) {
-        alert("Erro: nenhum job ativo");
+        alert("Erro: produção não encontrada");
         return;
       }
 
@@ -258,7 +301,7 @@
       processing.classList.remove('hidden');
 
       const checkPayment = () => {
-        fetch(`https://um2-backend.vercel.app/check-payment/${jobId}`)
+        fetch(`${backendUrl}/check-payment/${jobId}`)
         .then(r => r.json())
         .then(data => {
           if (data.paid) {
@@ -266,11 +309,11 @@
             download.classList.remove('hidden');
             localStorage.setItem('um2_paid_single', Date.now());
           } else {
-            setTimeout(checkPayment, 3000); // Verifica a cada 3s
+            setTimeout(checkPayment, 3000);
           }
         })
         .catch(err => {
-          alert("Erro ao verificar pagamento: " + err.message);
+          alert("Erro ao verificar: " + err.message);
           processing.classList.add('hidden');
           payment.classList.remove('hidden');
         });
@@ -279,53 +322,24 @@
       checkPayment();
     });
 
-    // DOWNLOADS (SÓ SE PAGO OU ASSINANTE)
+    // DOWNLOADS
     downloadWav.addEventListener('click', () => {
-      const isPremium = checkPremium();
-      const hasPaid = localStorage.getItem('um2_paid_single');
-
-      if (!isPremium && !hasPaid) {
-        alert("⚠️ Pague R$11 ou assine o plano ilimitado para baixar.");
-        payment.classList.remove('hidden');
+      const jobId = localStorage.getItem('um2_job_id');
+      if (!jobId) {
+        alert("Erro: produção não encontrada");
         return;
       }
-
-      downloadFile("producao_um2.wav", "audio/wav");
+      window.location.href = `${backendUrl}/download/${jobId}.wav`;
     });
 
     downloadMp3.addEventListener('click', () => {
-      const isPremium = checkPremium();
-      const hasPaid = localStorage.getItem('um2_paid_single');
-
-      if (!isPremium && !hasPaid) {
-        alert("⚠️ Pague R$11 ou assine o plano ilimitado para baixar.");
-        payment.classList.remove('hidden');
+      const jobId = localStorage.getItem('um2_job_id');
+      if (!jobId) {
+        alert("Erro: produção não encontrada");
         return;
       }
-
-      downloadFile("producao_um2.mp3", "audio/mpeg");
-    });
-
-    function downloadFile(filename, type) {
-      const url = URL.createObjectURL(new Blob(["fake audio data - substitua pela IA real"], { type }));
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }
-
-    // AO CARREGAR, VERIFICA ASSINATURA
-    window.addEventListener('load', () => {
-      const hasPaid = localStorage.getItem('um2_paid_single');
-      const isPremium = checkPremium();
-
-      if ((hasPaid || isPremium) && player.src) {
-        download.classList.remove('hidden');
-      }
+      window.location.href = `${backendUrl}/download/${jobId}.mp3`;
     });
   </script>
 </body>
-</html>
+        </html>
