@@ -1,0 +1,6 @@
+{
+  "appId": "com.um2.produtor",
+  "appName": "UM2 Produtor",
+  "webDir": ".",
+  "bundledWebRuntime": false
+}
