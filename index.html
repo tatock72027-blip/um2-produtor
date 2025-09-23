@@ -13,13 +13,85 @@
       --card: #1a1a2e;
       --text: #ffffff;
       --accent: #ffcc00;
+      --back-btn: #555;
+      --back-btn-hover: #777;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-    body { background: var(--bg); color: var(--text); padding: 20px; }
-    .container { max-width: 600px; margin: 0 auto; background: var(--card); padding: 30px; border-radius: 20px; }
-    h1 { font-size: 32px; margin: 20px 0; text-align: center; }
-    h2 { font-size: 22px; margin: 25px 0 15px; text-align: left; }
+    body { 
+      background: var(--bg); 
+      color: var(--text); 
+      padding: 20px; 
+      position: relative; 
+      overflow-x: hidden;
+    }
+    
+    /* 🌌 FUNDO 3D SISTEMA SOLAR */
+    #solarSystem {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: radial-gradient(ellipse at center, #1a1a3a 0%, #00001a 100%);
+      overflow: hidden;
+    }
+    
+    .planet {
+      position: absolute;
+      border-radius: 50%;
+      box-shadow: 0 0 20px rgba(255,255,255,0.3);
+      animation: float 20s infinite linear;
+    }
+    
+    .sun {
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, #ffd700, #ff8c00);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 60px #ffcc00, inset 0 0 20px rgba(255,255,255,0.5);
+    }
+    
+    .mercury { width: 20px; height: 20px; background: #a9a9a9; top: 45%; left: 40%; animation-duration: 8s; }
+    .venus { width: 30px; height: 30px; background: #e6e6fa; top: 55%; left: 60%; animation-duration: 12s; }
+    .earth { width: 35px; height: 35px; background: #1e90ff; top: 40%; left: 65%; animation-duration: 16s; }
+    .mars { width: 25px; height: 25px; background: #ff4500; top: 60%; left: 45%; animation-duration: 20s; }
+    .jupiter { width: 60px; height: 60px; background: #deb887; top: 30%; left: 30%; animation-duration: 30s; }
+    
+    @keyframes float {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    .container { 
+      max-width: 600px; 
+      margin: 0 auto; 
+      background: var(--card); 
+      padding: 30px; 
+      border-radius: 20px; 
+      position: relative;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    
+    h1 { 
+      font-size: 32px; 
+      margin: 20px 0; 
+      text-align: center; 
+      text-shadow: 0 0 10px var(--accent);
+    }
+    h2 { 
+      font-size: 22px; 
+      margin: 25px 0 15px; 
+      text-align: left; 
+      color: var(--accent);
+    }
+    
     button { 
       background: var(--primary); 
       color: white; 
@@ -32,14 +104,67 @@
       width: 100%;
       font-weight: bold;
       transition: all 0.3s;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     }
-    button:hover { transform: scale(1.02); }
-    button:disabled { background: #555; cursor: not-allowed; }
-    .secondary { background: var(--secondary); }
-    .premium { background: var(--premium); color: #000; }
-    #player { width: 100%; margin: 20px 0; }
+    button:hover { 
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(255,45,85,0.4);
+    }
+    button:disabled { 
+      background: #555; 
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    .secondary { background: var(--secondary); box-shadow: 0 5px 15px rgba(74,158,255,0.3); }
+    .secondary:hover { box-shadow: 0 8px 25px rgba(74,158,255,0.4); }
+    .premium { 
+      background: var(--premium); 
+      color: #000; 
+      box-shadow: 0 5px 15px rgba(255,204,0,0.3);
+    }
+    .premium:hover { 
+      box-shadow: 0 8px 25px rgba(255,204,0,0.4);
+      transform: translateY(-3px);
+    }
+    .back-btn {
+      background: var(--back-btn);
+      color: white;
+      width: 50px;
+      padding: 10px;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 20;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+    }
+    .back-btn:hover {
+      background: var(--back-btn-hover);
+      transform: translateY(-2px);
+    }
+    
+    #player { 
+      width: 100%; 
+      margin: 20px 0; 
+      background: rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 10px;
+    }
     .hidden { display: none !important; }
-    .section { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 16px; margin: 20px 0; }
+    
+    .section { 
+      background: rgba(255,255,255,0.05); 
+      padding: 20px; 
+      border-radius: 16px; 
+      margin: 20px 0;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    
     select, input { 
       padding: 16px; 
       margin: 12px 0; 
@@ -49,7 +174,9 @@
       color: white; 
       border: 1px solid rgba(255,255,255,0.2); 
       font-size: 16px;
+      backdrop-filter: blur(5px);
     }
+    
     .status { 
       padding: 15px; 
       background: rgba(255,204,0,0.2); 
@@ -58,7 +185,9 @@
       font-weight: bold; 
       color: var(--accent);
       text-align: center;
+      border: 1px solid rgba(255,204,0,0.3);
     }
+    
     #timer { 
       padding: 15px; 
       background: rgba(255,204,0,0.1); 
@@ -68,15 +197,21 @@
       color: var(--accent);
       text-align: center;
       font-size: 18px;
+      border: 1px solid rgba(255,204,0,0.2);
     }
+    
+    /* 🖼️ QR CODE AJUSTADO */
     #qrcode { 
-      width: 220px; 
-      height: 220px; 
-      margin: 25px auto; 
+      width: 240px; 
+      height: 240px; 
+      margin: 30px auto 20px; 
       background: white; 
-      padding: 15px; 
-      border-radius: 16px; 
+      padding: 20px; 
+      border-radius: 20px; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      border: 3px solid #ffcc00;
     }
+    
     .badge { 
       background: var(--premium); 
       color: #000; 
@@ -87,7 +222,9 @@
       top: -10px; 
       right: -10px; 
       font-weight: bold;
+      box-shadow: 0 5px 15px rgba(255,204,0,0.3);
     }
+    
     .countdown { 
       background: rgba(255,204,0,0.2); 
       padding: 15px; 
@@ -96,24 +233,78 @@
       font-weight: bold; 
       color: var(--accent);
       text-align: center;
+      border: 1px solid rgba(255,204,0,0.3);
     }
+    
     .feature-grid { 
       display: grid; 
       grid-template-columns: 1fr 1fr; 
       gap: 15px; 
       margin: 20px 0;
     }
+    
     .feature-card { 
       background: rgba(255,255,255,0.05); 
       padding: 15px; 
       border-radius: 12px; 
       text-align: center;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: all 0.3s;
+    }
+    .feature-card:hover {
+      background: rgba(255,255,255,0.1);
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    /* ⬆️ BOTÃO VOLTAR AO TOPO */
+    #backToTop {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 5px 15px rgba(255,45,85,0.4);
+      cursor: pointer;
+      z-index: 100;
+      opacity: 0;
+      transition: all 0.3s;
+    }
+    #backToTop.visible {
+      opacity: 1;
+    }
+    #backToTop:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(255,45,85,0.6);
     }
   </style>
 </head>
 <body>
+  <!-- 🌌 FUNDO 3D SISTEMA SOLAR -->
+  <div id="solarSystem">
+    <div class="planet sun"></div>
+    <div class="planet mercury"></div>
+    <div class="planet venus"></div>
+    <div class="planet earth"></div>
+    <div class="planet mars"></div>
+    <div class="planet jupiter"></div>
+  </div>
+
+  <!-- ⬆️ BOTÃO VOLTAR AO TOPO -->
+  <div id="backToTop">↑</div>
+
   <div class="container">
-    <div class="badge">🔥 VERSÃO FINAL</div>
+    <!-- BOTÃO DE VOLTAR (APARECE NAS ETAPAS 2+) -->
+    <button class="back-btn hidden" id="backBtn">←</button>
+    
+    <div class="badge">🚀 VERSÃO FINAL</div>
     <h1>UM2 PRODUTOR</h1>
     <p style="text-align: center; margin-bottom: 30px;">IA Studio — Sem login, sem cartão. Produza em 1 minuto.</p>
 
@@ -172,6 +363,10 @@
     <div id="recording" class="hidden">
       <h2>🎙️ Grave Sua Voz</h2>
       <div id="timer">Toque em "GRAVAR" para começar</div>
+      
+      <!-- 🎧 PLAYER PARA OUVIR BEAT ENQUANTO GRAVA -->
+      <audio id="beatPlayer" controls style="width: 100%; margin: 20px 0; background: rgba(255,255,255,0.1); border-radius: 12px; padding: 10px;"></audio>
+      
       <button id="recordBtn" class="secondary">▶️ GRAVAR VOZ (até 3m54s)</button>
       <button id="stopBtn" class="secondary hidden">⏹️ PARAR GRAVAÇÃO</button>
       <button id="produceBtn" disabled>🎨 Produzir com IA (Mix + Master)</button>
@@ -202,9 +397,14 @@
       <h2>📲 Pague via PIX</h2>
       <div class="status">Chave PIX: 21977290154</div>
       <div id="qrcode">
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=pix://21977290154" alt="QR Code PIX" />
+        <!-- QR CODE FUNCIONAL PARA O PIX 21977290154 -->
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=00020101021226840014br.gov.bcb.pix2562qrcodespix.bcb.gov.br/pix/v2/21977290154520400005303986540511.005802BR5913UM2 PRODUTOR6008BRASILIA62070503***6304****" alt="QR Code PIX" />
       </div>
+      <p style="margin: 15px 0; font-size: 14px;">Após pagar, clique em:</p>
       <button id="confirmPay" class="secondary">✅ Já paguei, liberar download</button>
+      <p style="margin: 15px 0; font-size: 12px; color: #aaa;">
+        O pagamento é confirmado manualmente por enquanto. Em breve: confirmação automática via webhook.
+      </p>
     </div>
 
     <!-- ETAPA 7: DOWNLOAD -->
@@ -228,9 +428,12 @@
     const payment = document.getElementById('payment');
     const download = document.getElementById('download');
     const player = document.getElementById('player');
+    const beatPlayer = document.getElementById('beatPlayer');
     const timer = document.getElementById('timer');
     const countdownEl = document.getElementById('countdown');
     const endDateEl = document.getElementById('endDate');
+    const backBtn = document.getElementById('backBtn');
+    const backToTop = document.getElementById('backToTop');
 
     let audioBlob = null;
     let mediaRecorder = null;
@@ -239,6 +442,16 @@
     let startTime = 0;
     let timerInterval = null;
     let jobId = null;
+
+    // ESTADO DAS SELEÇÕES (para não perder ao voltar)
+    const state = {
+      mode: null,
+      genre: '',
+      mood: '',
+      voiceType: '',
+      lyricsTheme: '',
+      beatFile: null
+    };
 
     // DATA DO CARNAVAL 2026
     const offerEndDate = new Date('2026-02-15T23:59:59');
@@ -255,43 +468,116 @@
       return false;
     }
 
-    // SELECIONAR MODO
-    function selectMode(mode) {
-      step1.classList.add('hidden');
-      config.classList.remove('hidden');
-      if (mode === 'upload') {
-        // Adiciona input de upload dinamicamente
-        const uploadInput = document.createElement('input');
-        uploadInput.type = 'file';
-        uploadInput.accept = 'audio/*';
-        uploadInput.id = 'uploadBeat';
-        uploadInput.style.width = '100%';
-        uploadInput.style.padding = '16px';
-        uploadInput.style.margin = '12px 0';
-        uploadInput.style.borderRadius = '12px';
-        uploadInput.style.background = 'rgba(255,255,255,0.1)';
-        uploadInput.onchange = () => {
-          if (uploadInput.files.length > 0) {
-            document.getElementById('configNext').disabled = false;
-          }
-        };
-        config.insertBefore(uploadInput, document.getElementById('genre'));
+    // MOSTRA/ESCONDE BOTÃO DE VOLTAR
+    function updateBackButton() {
+      if (config.classList.contains('hidden') && 
+          recording.classList.contains('hidden') && 
+          processing.classList.contains('hidden') && 
+          result.classList.contains('hidden') && 
+          payment.classList.contains('hidden') && 
+          download.classList.contains('hidden')) {
+        backBtn.classList.add('hidden');
+      } else {
+        backBtn.classList.remove('hidden');
       }
     }
 
-    // AVANÇAR CONFIGURAÇÕES
+    // VOLTA PARA ETAPA ANTERIOR
+    backBtn.addEventListener('click', () => {
+      if (!payment.classList.contains('hidden') || !download.classList.contains('hidden')) {
+        payment.classList.add('hidden');
+        download.classList.add('hidden');
+        result.classList.remove('hidden');
+      } else if (!result.classList.contains('hidden')) {
+        result.classList.add('hidden');
+        recording.classList.remove('hidden');
+      } else if (!recording.classList.contains('hidden')) {
+        recording.classList.add('hidden');
+        config.classList.remove('hidden');
+      } else if (!config.classList.contains('hidden')) {
+        config.classList.add('hidden');
+        step1.classList.remove('hidden');
+      }
+      updateBackButton();
+    });
+
+    // SCROLL PARA VOLTAR AO TOPO
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // SELECIONAR MODO
+    function selectMode(mode) {
+      state.mode = mode;
+      step1.classList.add('hidden');
+      config.classList.remove('hidden');
+      updateBackButton();
+      
+      if (mode === 'upload') {
+        // Adiciona input de upload dinamicamente (se ainda não existir)
+        if (!document.getElementById('uploadBeat')) {
+          const uploadInput = document.createElement('input');
+          uploadInput.type = 'file';
+          uploadInput.accept = 'audio/*';
+          uploadInput.id = 'uploadBeat';
+          uploadInput.style.width = '100%';
+          uploadInput.style.padding = '16px';
+          uploadInput.style.margin = '12px 0';
+          uploadInput.style.borderRadius = '12px';
+          uploadInput.style.background = 'rgba(255,255,255,0.1)';
+          uploadInput.onchange = (e) => {
+            state.beatFile = e.target.files[0];
+            if (state.beatFile) {
+              const fileURL = URL.createObjectURL(state.beatFile);
+              beatPlayer.src = fileURL;
+              document.getElementById('configNext').disabled = false;
+            }
+          };
+          config.insertBefore(uploadInput, document.getElementById('genre'));
+        }
+      }
+    }
+
+    // CARREGAR ESTADO ANTERIOR NOS CAMPOS
+    function loadState() {
+      document.getElementById('genre').value = state.genre;
+      document.getElementById('mood').value = state.mood;
+      document.getElementById('voiceType').value = state.voiceType;
+      document.getElementById('lyricsTheme').value = state.lyricsTheme;
+    }
+
+    // SALVAR ESTADO AO AVANÇAR
     document.getElementById('configNext').addEventListener('click', () => {
-      const genre = document.getElementById('genre').value;
-      const voiceType = document.getElementById('voiceType').value;
-      if (!genre || !voiceType) {
+      state.genre = document.getElementById('genre').value;
+      state.mood = document.getElementById('mood').value;
+      state.voiceType = document.getElementById('voiceType').value;
+      state.lyricsTheme = document.getElementById('lyricsTheme').value;
+
+      if (!state.genre || !state.voiceType) {
         alert("⚠️ Selecione pelo menos o estilo musical e tipo de voz!");
         return;
       }
       config.classList.add('hidden');
       recording.classList.remove('hidden');
+      updateBackButton();
+      
+      // Se tiver beat, carrega no player
+      if (state.beatFile) {
+        const fileURL = URL.createObjectURL(state.beatFile);
+        beatPlayer.src = fileURL;
+        beatPlayer.style.display = 'block';
+      }
     });
 
-    // GRAVAR VOZ
+    // GRAVAR VOZ (OUVINDO BEAT AO MESMO TEMPO)
     document.getElementById('recordBtn').addEventListener('click', async () => {
       try {
         stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -314,7 +600,7 @@
         timerInterval = setInterval(() => {
           const elapsed = Date.now() - startTime;
           const isPremium = checkPremium();
-          const maxDuration = isPremium ? 420000 : 234000; // 7min ou 3m54s
+          const maxDuration = isPremium ? 420000 : 234000;
           const remaining = Math.max(0, Math.floor((maxDuration - elapsed) / 1000));
           const minutes = Math.floor(remaining / 60);
           const seconds = String(remaining % 60).padStart(2, '0');
@@ -322,90 +608,4 @@
           if (elapsed >= maxDuration) {
             mediaRecorder.stop();
             stream.getTracks().forEach(track => track.stop());
-            document.getElementById('stopBtn').classList.add('hidden');
-            document.getElementById('recordBtn').classList.remove('hidden');
-          }
-        }, 1000);
-
-      } catch (err) {
-        alert("Erro ao acessar microfone: " + err.message);
-      }
-    });
-
-    // PARAR GRAVAÇÃO
-    document.getElementById('stopBtn').addEventListener('click', () => {
-      if (mediaRecorder && isRecording) {
-        mediaRecorder.stop();
-        stream.getTracks().forEach(track => track.stop());
-        clearInterval(timerInterval);
-        document.getElementById('stopBtn').classList.add('hidden');
-        document.getElementById('recordBtn').classList.remove('hidden');
-        timer.innerText = "✅ Gravação concluída! Clique em 'Produzir com IA'";
-      }
-    });
-
-    // PRODUZIR COM IA
-    document.getElementById('produceBtn').addEventListener('click', () => {
-      recording.classList.add('hidden');
-      processing.classList.remove('hidden');
-
-      // Simula processamento real (em produção: chame APIs reais)
-      setTimeout(() => {
-        processing.classList.add('hidden');
-        result.classList.remove('hidden');
-        
-        // URL fake (em produção: URL do áudio processado pelo backend)
-        player.src = "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav";
-        player.style.display = "block";
-        
-        // Gera ID único para esta produção
-        jobId = 'prod_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-      }, 30000); // 30 segundos de "processamento"
-    });
-
-    // PAGAR
-    document.getElementById('payBtn').addEventListener('click', () => {
-      result.classList.add('hidden');
-      payment.classList.remove('hidden');
-    });
-
-    // CONFIRMAR PAGAMENTO
-    document.getElementById('confirmPay').addEventListener('click', () => {
-      payment.classList.add('hidden');
-      download.classList.remove('hidden');
-      localStorage.setItem('um2_paid_single', Date.now());
-    });
-
-    // DOWNLOADS
-    document.getElementById('downloadWav').addEventListener('click', () => {
-      downloadFile("producao_um2.wav", "audio/wav");
-    });
-
-    document.getElementById('downloadMp3').addEventListener('click', () => {
-      downloadFile("producao_um2.mp3", "audio/mpeg");
-    });
-
-    function downloadFile(filename, type) {
-      const url = URL.createObjectURL(new Blob(["IA PRODUCTION - EM PRODUÇÃO SERÁ SUBSTITUÍDO POR ÁUDIO REAL MASTERIZADO"], { type }));
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }
-
-    // ASSINAR PLANO ILIMITADO
-    document.getElementById('premiumBtn').addEventListener('click', () => {
-      alert("💎 Assinatura ilimitada ativada por 30 dias após pagamento de R$49!");
-      // Em produção: redireciona para PIX de assinatura
-      localStorage.setItem('um2_premium', JSON.stringify({
-        subscribedAt: new Date(),
-        expiry: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 dias
-      }));
-      alert("✅ Assinatura ativada! Produza quantas músicas quiser!");
-    });
-  </script>
-</body>
-  </html>
+            document.getElementById('stopBtn').classLi
