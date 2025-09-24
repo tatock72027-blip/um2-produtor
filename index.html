@@ -22,6 +22,7 @@
       padding: 20px; 
       position: relative;
       overflow-x: hidden;
+      touch-action: manipulation;
     }
 
     /* 🌌 FUNDO 3D SISTEMA SOLAR */
@@ -79,20 +80,21 @@
       background: var(--primary); 
       color: white; 
       border: none; 
-      padding: 14px 28px; 
-      margin: 10px 0; 
-      border-radius: 8px; 
+      padding: 16px 28px;
+      margin: 12px 0; 
+      border-radius: 12px;
       font-size: 18px; 
       cursor: pointer; 
       width: 100%;
       transition: all 0.2s;
+      min-height: 48px;
     }
     button:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
     button:disabled { background: #555; cursor: not-allowed; transform: none; }
-    #upload, #recordBtn { background: var(--secondary); }
+    #upload, #recordBtn, #generateBeatBtn { background: var(--secondary); }
     #premiumBtn { background: var(--premium); color: #000; font-weight: bold; }
-    #player, #beatPlayer { margin: 20px auto; width: 90%; display: none; }
-    #payment, #download { display: none; }
+    #player, #beatPlayer, .stem-player { margin: 15px auto; width: 90%; display: none; }
+    #payment, #download, #stemsSection, #lyricsSection { display: none; }
     
     /* 🖼️ QR CODE AJUSTADO */
     #qrcode { 
@@ -109,8 +111,17 @@
     #pixInfo { background: #222; padding: 15px; border-radius: 8px; margin: 20px 0; font-size: 14px; word-break: break-all; }
     .hidden { display: none !important; }
     .badge { background: #ff3b30; color: white; padding: 5px 10px; border-radius: 20px; font-size: 14px; position: absolute; top: -10px; right: -10px; }
-    .countdown { background: #333; padding: 10px; border-radius: 8px; margin: 15px 0; font-weight: bold; color: var(--accent); }
+    .countdown { background: #333; padding: 15px; border-radius: 12px; margin: 15px 0; font-weight: bold; color: var(--accent); }
     .free-tag { background: #00c853; padding: 5px 10px; border-radius: 4px; font-size: 12px; margin-left: 10px; }
+    .success-message { 
+      background: rgba(0, 200, 83, 0.2); 
+      padding: 15px; 
+      border-radius: 12px; 
+      margin: 20px 0; 
+      font-weight: bold; 
+      color: #00c853;
+      display: none;
+    }
 
     /* CONTROLES AVANÇADOS */
     .control-group {
@@ -141,12 +152,41 @@
     
     select {
       width: 100%;
-      padding: 12px;
-      border-radius: 8px;
+      padding: 14px;
+      border-radius: 12px;
       background: #2a2a3e;
       color: white;
       border: 1px solid #444;
-      margin: 10px 0;
+      margin: 12px 0;
+      min-height: 48px;
+    }
+    
+    /* EDITOR DE LETRA */
+    #lyricsEditor {
+      width: 100%;
+      height: 120px;
+      padding: 15px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.2);
+      margin: 15px 0;
+      font-size: 16px;
+    }
+    
+    /* STEMS GRID */
+    .stems-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin: 20px 0;
+    }
+    
+    .stem-card {
+      background: rgba(255,255,255,0.05);
+      padding: 15px;
+      border-radius: 12px;
+      text-align: center;
     }
   </style>
 </head>
@@ -160,6 +200,43 @@
     <div class="planet mars"></div>
     <div class="planet jupiter"></div>
   </div>
+
+  <!-- ⬅️ BOTÃO DE VOLTAR -->
+  <button id="backBtn" style="
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 48px;
+    height: 48px;
+    background: #555;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 20;
+    display: none;
+    min-height: 48px;
+  ">←</button>
+
+  <!-- ⬆️ BOTÃO VOLTAR AO TOPO -->
+  <button id="backToTop" style="
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 56px;
+    height: 56px;
+    background: #ff2d55;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 0.3s;
+    min-height: 56px;
+  ">↑</button>
 
   <div class="container">
     <div class="badge">🔥 PRO</div>
@@ -180,11 +257,26 @@
     
     <!-- ETAPA 1: UPLOAD OU GRAVAÇÃO -->
     <div id="step1">
+      <!-- 🎹 BOTÃO GERAR BEAT POR IA -->
+      <button id="generateBeatBtn">🎹 Gerar Beat por IA</button>
+      
       <input type="file" id="upload" accept="audio/*" />
       <p>OU</p>
       
       <!-- 🎧 PLAYER PARA OUVIR BEAT -->
       <audio id="beatPlayer" controls></audio>
+      
+      <!-- 🎚️ CONTROLE DE VOLUME DO BEAT -->
+      <div class="slider-container">
+        <label>🔊 Volume do Beat: <span id="beatVolumeValue">70</span>%</label>
+        <input type="range" id="beatVolume" min="0" max="100" value="70">
+      </div>
+      
+      <!-- 📝 EDITOR DE LETRA -->
+      <div class="control-group">
+        <label>✍️ Letra da Música (opcional)</label>
+        <textarea id="lyricsEditor" placeholder="Escreva sua letra aqui ou deixe em branco para gerar por IA..."></textarea>
+      </div>
       
       <!-- 🎛️ CONTROLES AVANÇADOS DE IA -->
       <div class="control-group">
@@ -229,15 +321,44 @@
 
     <!-- ETAPA 2: PROCESSANDO -->
     <div id="processing" class="hidden">
-      <p class="status">⏳ Gerando música com IA avançada...</p>
+      <p class="status">📝 Gerando letra profissional...</p>
     </div>
 
     <!-- ETAPA 3: OUVIR RESULTADO -->
     <div id="result" class="hidden">
       <p>✅ Produção finalizada — mixada e masterizada!</p>
+      
+      <!-- 🎧 PLAYER PRINCIPAL -->
       <audio id="player" controls></audio>
+      
+      <!-- 👁️ STEMS SECTION -->
+      <div id="stemsSection">
+        <h3>🎧 Stems Separadas (Demucs v4)</h3>
+        <div class="stems-grid">
+          <div class="stem-card">
+            <p>Voz</p>
+            <audio class="stem-player" id="vocalsPlayer" controls></audio>
+          </div>
+          <div class="stem-card">
+            <p>Beat</p>
+            <audio class="stem-player" id="accompanimentPlayer" controls></audio>
+          </div>
+          <div class="stem-card">
+            <p>Bateria</p>
+            <audio class="stem-player" id="drumsPlayer" controls></audio>
+          </div>
+          <div class="stem-card">
+            <p>Baixo</p>
+            <audio class="stem-player" id="bassPlayer" controls></audio>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 🔁 BOTÃO REPROCESSAR -->
+      <button id="reprocessBtn">🔄 Reprocessar com Novas Configurações</button>
+      
       <div id="payOrFree">
-        <button id="payBtn">💰 Pagar R$11,00 e Baixar WAV + MP3</button>
+        <button id="payBtn">💰 Pagar R$11,00 e Baixar Tudo</button>
         <span class="free-tag" id="freeTag">Ilimitado para assinantes</span>
       </div>
     </div>
@@ -256,8 +377,21 @@
     <!-- ETAPA 5: DOWNLOAD -->
     <div id="download" class="hidden">
       <p>🎉 Produção liberada! Baixe em alta qualidade:</p>
-      <button id="downloadWav">⬇️ Baixar WAV (Masterizado)</button>
-      <button id="downloadMp3">⬇️ Baixar MP3 (Para Redes)</button>
+      
+      <!-- 📤 DOWNLOAD DE STEMS -->
+      <div class="stems-grid">
+        <button id="downloadVocals">⬇️ Voz (WAV)</button>
+        <button id="downloadAccompaniment">⬇️ Beat (WAV)</button>
+        <button id="downloadDrums">⬇️ Bateria (WAV)</button>
+        <button id="downloadBass">⬇️ Baixo (WAV)</button>
+        <button id="downloadFullWav">⬇️ Full Mix (WAV)</button>
+        <button id="downloadFullMp3">⬇️ Full Mix (MP3)</button>
+      </div>
+      
+      <div class="success-message" id="successMessage">
+        ✅ Produção salva no seu dispositivo!
+      </div>
+      
       <p style="margin-top: 20px; font-size: 14px;">Assinante? Produza quantas músicas quiser! 🚀</p>
     </div>
   </div>
@@ -275,13 +409,17 @@
     const payment = document.getElementById('payment');
     const confirmPay = document.getElementById('confirmPay');
     const download = document.getElementById('download');
-    const downloadWav = document.getElementById('downloadWav');
-    const downloadMp3 = document.getElementById('downloadMp3');
     const step1 = document.getElementById('step1');
     const premiumBtn = document.getElementById('premiumBtn');
     const countdownEl = document.getElementById('countdown');
     const endDateEl = document.getElementById('endDate');
     const freeTag = document.getElementById('freeTag');
+    const generateBeatBtn = document.getElementById('generateBeatBtn');
+    const reprocessBtn = document.getElementById('reprocessBtn');
+    const successMessage = document.getElementById('successMessage');
+    const beatVolumeSlider = document.getElementById('beatVolume');
+    const beatVolumeValue = document.getElementById('beatVolumeValue');
+    const lyricsEditor = document.getElementById('lyricsEditor');
 
     // SLIDERS
     const energySlider = document.getElementById('energy');
@@ -293,7 +431,23 @@
     const tempoSlider = document.getElementById('tempo');
     const tempoValue = document.getElementById('tempoValue');
 
+    // STEMS PLAYERS
+    const vocalsPlayer = document.getElementById('vocalsPlayer');
+    const accompanimentPlayer = document.getElementById('accompanimentPlayer');
+    const drumsPlayer = document.getElementById('drumsPlayer');
+    const bassPlayer = document.getElementById('bassPlayer');
+
+    // DOWNLOAD BUTTONS
+    const downloadVocals = document.getElementById('downloadVocals');
+    const downloadAccompaniment = document.getElementById('downloadAccompaniment');
+    const downloadDrums = document.getElementById('downloadDrums');
+    const downloadBass = document.getElementById('downloadBass');
+    const downloadFullWav = document.getElementById('downloadFullWav');
+    const downloadFullMp3 = document.getElementById('downloadFullMp3');
+
     let audioBlob = null;
+    let currentBeatUrl = null;
+    let stemsGenerated = false;
 
     // DATA DO CARNAVAL 2026
     const offerEndDate = new Date('2026-02-15T23:59:59');
@@ -314,6 +468,13 @@
     
     tempoSlider.addEventListener('input', () => {
       tempoValue.textContent = tempoSlider.value + '%';
+    });
+    
+    beatVolumeSlider.addEventListener('input', () => {
+      beatVolumeValue.textContent = beatVolumeSlider.value;
+      if (beatPlayer) {
+        beatPlayer.volume = beatVolumeSlider.value / 100;
+      }
     });
 
     // VERIFICA SE USUÁRIO JÁ É ASSINANTE
@@ -359,9 +520,27 @@
       if (upload.files.length > 0) {
         nextBtn.disabled = false;
         const fileURL = URL.createObjectURL(upload.files[0]);
+        currentBeatUrl = fileURL;
         beatPlayer.src = fileURL;
         beatPlayer.style.display = "block";
       }
+    });
+
+    // 🎹 GERAR BEAT POR IA
+    generateBeatBtn.addEventListener('click', () => {
+      const genre = document.getElementById('structure').value;
+      const energy = energySlider.value;
+      const complexity = complexitySlider.value;
+      
+      alert(`🎹 Gerando beat no estilo "${genre}" com energia ${energy} e complexidade ${complexity}...`);
+      
+      const fakeBeatUrl = "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav";
+      currentBeatUrl = fakeBeatUrl;
+      beatPlayer.src = fakeBeatUrl;
+      beatPlayer.style.display = "block";
+      nextBtn.disabled = false;
+      
+      alert("✅ Beat gerado com sucesso! Agora grave sua voz.");
     });
 
     // GRAVAÇÃO DE VOZ
@@ -410,18 +589,80 @@
       }
     });
 
-    // PROCESSAR COM IA
-    nextBtn.addEventListener('click', () => {
+    // 📝 GERAR LETRA (SIMULADO)
+    function generateLyrics() {
+      const userLyrics = lyricsEditor.value.trim();
+      if (userLyrics) {
+        return userLyrics;
+      }
+      
+      const theme = document.getElementById('lyricsTheme')?.value || "amor e superação";
+      const structure = document.getElementById('structure').value;
+      return `Letra gerada por IA sobre ${theme} no estilo ${structure}.\n\n[Verso 1]\nEssa é a primeira linha da letra...\n\n[Refrão]\nEsse é o refrão emocionante...`;
+    }
+
+    // PROCESSAR COM IA (COM SEPARAÇÃO DE STEMS)
+    function processWithAI() {
       step1.classList.add('hidden');
       processing.classList.remove('hidden');
+      
+      // Atualiza status com etapas de stems
+      const stages = [
+        "📝 Gerando letra profissional...",
+        "🎹 Criando melodia e harmonia...",
+        "🎙️ Processando sua voz...",
+        "🔍 Separando stems com Demucs v4...",
+        "🥁 Extraindo bateria...",
+        "🎸 Extraindo baixo...",
+        "🎚️ Mixando todas as pistas...",
+        "🔊 Aplicando masterização...",
+        "✅ Produção finalizada!"
+      ];
+      
+      let stageIndex = 0;
+      const statusElement = document.querySelector('.status');
+      
+      const interval = setInterval(() => {
+        if (stageIndex < stages.length - 1) {
+          statusElement.textContent = stages[stageIndex];
+          stageIndex++;
+        } else {
+          clearInterval(interval);
+          processing.classList.add('hidden');
+          result.classList.remove('hidden');
+          
+          // Áudio principal
+          player.src = "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav";
+          player.style.display = "block";
+          
+          // Simula stems separadas
+          vocalsPlayer.src = "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav";
+          accompanimentPlayer.src = "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav";
+          drumsPlayer.src = "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav";
+          bassPlayer.src = "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav";
+          
+          // Mostra stems
+          document.getElementById('stemsSection').style.display = "block";
+          stemsGenerated = true;
+          
+          updateUIForPremium();
+        }
+      }, 1500);
+    }
 
-      setTimeout(() => {
-        processing.classList.add('hidden');
-        result.classList.remove('hidden');
-        player.src = "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav";
-        player.style.display = "block";
-        updateUIForPremium();
-      }, 3000);
+    nextBtn.addEventListener('click', processWithAI);
+
+    // 🔁 REPROCESSAR COM NOVAS CONFIGURAÇÕES
+    reprocessBtn.addEventListener('click', () => {
+      result.classList.add('hidden');
+      step1.classList.remove('hidden');
+      if (currentBeatUrl) {
+        beatPlayer.src = currentBeatUrl;
+        beatPlayer.style.display = "block";
+      }
+      if (audioBlob) {
+        nextBtn.disabled = false;
+      }
     });
 
     // PAGAR
@@ -438,31 +679,30 @@
       alert("✅ Pagamento confirmado! Em produção real, isso seria automático via webhook.");
     });
 
-    // DOWNLOADS
-    downloadWav.addEventListener('click', () => {
-      const isPremium = checkPremium();
-      const hasPaid = localStorage.getItem('um2_paid_single');
-      if (!isPremium && !hasPaid) {
-        alert("⚠️ Pague R$11 ou assine o plano ilimitado para baixar.");
-        payment.classList.remove('hidden');
-        return;
-      }
-      downloadFile("producao_um2.wav", "audio/wav");
-    });
+    // DOWNLOADS DE STEMS
+    function createDownloadHandler(filename, type) {
+      return () => {
+        const isPremium = checkPremium();
+        const hasPaid = localStorage.getItem('um2_paid_single');
+        if (!isPremium && !hasPaid) {
+          alert("⚠️ Pague R$11 ou assine o plano ilimitado para baixar.");
+          payment.classList.remove('hidden');
+          return;
+        }
+        downloadFile(filename, type);
+        successMessage.style.display = "block";
+      };
+    }
 
-    downloadMp3.addEventListener('click', () => {
-      const isPremium = checkPremium();
-      const hasPaid = localStorage.getItem('um2_paid_single');
-      if (!isPremium && !hasPaid) {
-        alert("⚠️ Pague R$11 ou assine o plano ilimitado para baixar.");
-        payment.classList.remove('hidden');
-        return;
-      }
-      downloadFile("producao_um2.mp3", "audio/mpeg");
-    });
+    downloadVocals.addEventListener('click', createDownloadHandler("voz.wav", "audio/wav"));
+    downloadAccompaniment.addEventListener('click', createDownloadHandler("beat.wav", "audio/wav"));
+    downloadDrums.addEventListener('click', createDownloadHandler("bateria.wav", "audio/wav"));
+    downloadBass.addEventListener('click', createDownloadHandler("baixo.wav", "audio/wav"));
+    downloadFullWav.addEventListener('click', createDownloadHandler("producao_completa.wav", "audio/wav"));
+    downloadFullMp3.addEventListener('click', createDownloadHandler("producao_completa.mp3", "audio/mpeg"));
 
     function downloadFile(filename, type) {
-      const url = URL.createObjectURL(new Blob(["IA PRODUCTION - EM PRODUÇÃO SERÁ SUBSTITUÍDO POR ÁUDIO REAL"], { type }));
+      const url = URL.createObjectURL(new Blob(["STEM AUDIO DATA - EM PRODUÇÃO SERÁ SUBSTITUÍDO POR ÁUDIO REAL"], { type }));
       const a = document.createElement('a');
       a.href = url;
       a.download = filename;
@@ -481,6 +721,57 @@
         download.classList.remove('hidden');
       }
     });
+
+    // --- NOVAS FUNÇÕES: BOTÕES DE NAVEGAÇÃO ---
+    const backBtn = document.getElementById('backBtn');
+    const backToTop = document.getElementById('backToTop');
+
+    function updateBackButton() {
+      if (
+        !processing.classList.contains('hidden') ||
+        !result.classList.contains('hidden') ||
+        !payment.classList.contains('hidden') ||
+        !download.classList.contains('hidden')
+      ) {
+        backBtn.style.display = 'block';
+      } else {
+        backBtn.style.display = 'none';
+      }
+    }
+
+    backBtn.addEventListener('click', () => {
+      if (!processing.classList.contains('hidden')) {
+        processing.classList.add('hidden');
+        step1.classList.remove('hidden');
+      } else if (!result.classList.contains('hidden')) {
+        result.classList.add('hidden');
+        step1.classList.remove('hidden');
+      } else if (!payment.classList.contains('hidden')) {
+        payment.classList.add('hidden');
+        result.classList.remove('hidden');
+      } else if (!download.classList.contains('hidden')) {
+        download.classList.add('hidden');
+        result.classList.remove('hidden');
+      }
+      updateBackButton();
+    });
+
+    const observer = new MutationObserver(updateBackButton);
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backToTop.style.opacity = '1';
+      } else {
+        backToTop.style.opacity = '0';
+      }
+    });
+
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    updateBackButton();
   </script>
 </body>
-  </html>
+</html>
